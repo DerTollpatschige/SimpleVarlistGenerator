@@ -5,14 +5,9 @@ class LibClean:
         self._collection.add(val)
 
     def removeduplicates(self, collection):
-        cleanedcollection = set()
+        cleanedcollection = list(set(collection))
 
-        for x in collection:
-            for y in self.getcollection():
-                if x != y:
-                    cleanedcollection.add(x)
-
-        return list(cleanedcollection)
+        return cleanedcollection
 
     def getcollection(self):
         return list(self._collection)
