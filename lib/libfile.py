@@ -2,6 +2,7 @@ from platform import system
 from pathlib import PureWindowsPath, PurePosixPath
 from lib.libvar import LibVar
 from lib.libstring import LibString
+from lib.libclean import LibClean
 from os import path, walk
 
 
@@ -12,6 +13,7 @@ class LibFile:
 
     _libvar = LibVar()
     _libstring = LibString()
+    _libclean = LibClean()
 
     def __init__(self, directory, option):
         self._option = option
@@ -29,8 +31,7 @@ class LibFile:
                 if file.endswith('.osc'):
                     self._foldercontents.append(path.join(root, file))
 
-    @staticmethod
-    def _findduplicates(lst):
+    def _findduplicates(self, lst):
         duplicates = set()
         uniques = set()
 
@@ -38,6 +39,7 @@ class LibFile:
             if item in uniques:
                 duplicates.add(item)
             else:
+                self._libclean.collector(item)
                 uniques.add(item)
         return uniques
 
@@ -50,7 +52,7 @@ class LibFile:
                 filecontent = f.read()
 
         if self._option == "varlist":
-            return list(self._findduplicates(self._libvar.extractvarname(filecontent)))
+            return self._libclean.removeduplicates(list(self._findduplicates(self._libvar.extractvarname(filecontent))))
         elif self._option == "stringvarlist":
             return list(self._findduplicates(self._libstring.extractstringname(filecontent)))
 
