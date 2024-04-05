@@ -32,15 +32,10 @@ class LibFile:
                     self._foldercontents.append(path.join(root, file))
 
     def _findduplicates(self, lst):
-        duplicates = set()
         uniques = set()
 
-        for item in lst:
-            if item in uniques:
-                duplicates.add(item)
-            else:
-                self._libclean.collector(item)
-                uniques.add(item)
+        for item in uniques:
+            self._libclean.collector(item)
         return uniques
 
     def processfile(self, file):
